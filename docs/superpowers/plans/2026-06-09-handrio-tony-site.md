@@ -1,0 +1,1191 @@
+# Handrio e Tony Cabeleireiros — Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** Build a single-page static website (cartão de visita online) for Handrio e Tony Cabeleireiros with 7 sections: Header, Hero, Serviços, Galeria (com lightbox), Avaliações, Equipe, Contato/Footer.
+
+**Architecture:** Single `index.html` file with all CSS in a `<style>` block and all JS in a `<script>` block at the bottom. No build step, no dependencies, no frameworks — just HTML/CSS/JS. Photos go in `images/` folder.
+
+**Tech Stack:** HTML5, CSS3 (custom properties, grid, flexbox), vanilla JavaScript. Google Fonts (Georgia already a system font; Lato for body text from CDN). GitHub Pages for hosting.
+
+---
+
+## File Map
+
+| File | Purpose |
+|------|---------|
+| `index.html` | Entire site: markup + `<style>` + `<script>` |
+| `images/salon-1.jpg` … `images/salon-6.jpg` | Gallery photos (add real photos here) |
+| `images/team-handrio.jpg` | Headshot Handrio (optional) |
+| `images/team-tony.jpg` | Headshot Tony (optional) |
+| `images/team-joaozinho.jpg` | Headshot Joãozinho (optional) |
+| `.gitignore` | Ignore OS files |
+| `README.md` | Deploy instructions |
+
+---
+
+## Task 1: Boilerplate, CSS Variables & Google Fonts
+
+**Files:**
+- Create: `index.html`
+- Create: `.gitignore`
+
+- [ ] **Step 1: Create `index.html` with full boilerplate**
+
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Handrio e Tony Cabeleireiros — Salão de beleza no Centro Histórico de Porto Alegre. Corte, coloração, escova, barba e muito mais. Ligue ou chame no WhatsApp.">
+  <title>Handrio e Tony Cabeleireiros — Porto Alegre</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ── CSS CUSTOM PROPERTIES ── */
+    :root {
+      --bg-light:    #FAF5EF;
+      --bg-medium:   #EDE0D0;
+      --bg-caramel:  #D4A97A;
+      --bg-dark:     #3D2B1F;
+      --bg-darker:   #5C3D2E;
+      --accent:      #C07C3A;
+      --text-main:   #3D2B1F;
+      --text-muted:  #8B6347;
+      --whatsapp:    #25D366;
+      --font-serif:  Georgia, 'Times New Roman', serif;
+      --font-sans:   'Lato', Arial, system-ui, sans-serif;
+    }
+
+    /* ── RESET ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-sans); color: var(--text-main); background: var(--bg-light); }
+    img  { display: block; width: 100%; height: 100%; object-fit: cover; }
+    a    { text-decoration: none; color: inherit; }
+  </style>
+</head>
+<body>
+
+  <!-- sections go here -->
+
+  <script>
+    // JS goes here
+  </script>
+</body>
+</html>
+```
+
+- [ ] **Step 2: Create `.gitignore`**
+
+```
+.DS_Store
+Thumbs.db
+*.log
+.superpowers/
+```
+
+- [ ] **Step 3: Open `index.html` in browser and confirm blank page loads without errors**
+
+Open in browser: `index.html`
+Expected: blank white page, no console errors, Google Fonts request in Network tab.
+
+- [ ] **Step 4: Create `images/` folder and add placeholder README**
+
+Create file `images/README.md`:
+```markdown
+# Imagens
+
+Adicione as fotos aqui com os nomes:
+
+- `salon-1.jpg` a `salon-6.jpg` — fotos do salão/trabalhos para a galeria
+- `team-handrio.jpg` — foto do Handrio
+- `team-tony.jpg` — foto do Tony
+- `team-joaozinho.jpg` — foto do Joãozinho
+
+Tamanho recomendado: 800×800px, formato JPG, máx 300 KB por foto.
+```
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add index.html .gitignore images/
+git commit -m "feat: project boilerplate, CSS variables, Google Fonts"
+```
+
+---
+
+## Task 2: Header com Navegação
+
+**Files:**
+- Modify: `index.html` — add `<header>` markup and CSS
+
+- [ ] **Step 1: Add header markup** (inside `<body>`, before `<!-- sections go here -->`)
+
+```html
+<header id="header">
+  <div class="header-inner">
+    <a href="#hero" class="header-logo">Handrio &amp; Tony</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="nav">
+      <a href="#servicos">Serviços</a>
+      <a href="#galeria">Galeria</a>
+      <a href="#equipe">Equipe</a>
+      <a href="#contato">Contato</a>
+      <a href="https://wa.me/5551992124041" class="nav-whatsapp" target="_blank" rel="noopener">
+        WhatsApp
+      </a>
+    </nav>
+  </div>
+</header>
+```
+
+- [ ] **Step 2: Add header CSS** (inside `<style>`)
+
+```css
+/* ── HEADER ── */
+#header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: var(--bg-darker);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.header-logo {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  color: var(--bg-light);
+  letter-spacing: 1px;
+}
+#nav {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+}
+#nav a {
+  font-size: 0.78rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--bg-caramel);
+  transition: color 0.2s;
+}
+#nav a:hover { color: var(--bg-light); }
+#nav .nav-whatsapp {
+  background: var(--whatsapp);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+}
+#nav .nav-whatsapp:hover { background: #1ebe5d; }
+
+/* hamburger — hidden on desktop */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--bg-caramel);
+  border-radius: 2px;
+  transition: transform 0.3s, opacity 0.3s;
+}
+/* open state */
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* push body down so content isn't hidden behind fixed header */
+body { padding-top: 60px; }
+```
+
+- [ ] **Step 3: Add hamburger JS** (inside `<script>`)
+
+```javascript
+// Hamburger menu
+const hamburger = document.getElementById('hamburger');
+const nav = document.getElementById('nav');
+
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('open');
+  nav.classList.toggle('open');
+});
+
+// Close menu when a nav link is clicked
+nav.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    hamburger.classList.remove('open');
+    nav.classList.remove('open');
+  });
+});
+```
+
+- [ ] **Step 4: Add mobile CSS for header** (inside `<style>`, after the header block)
+
+```css
+@media (max-width: 768px) {
+  .hamburger { display: flex; }
+  #nav {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 60px; left: 0; right: 0;
+    background: var(--bg-darker);
+    padding: 16px 24px 24px;
+    gap: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+  #nav.open { display: flex; }
+  #nav a { font-size: 0.9rem; }
+}
+```
+
+- [ ] **Step 5: Open in browser, resize to mobile, verify hamburger works**
+
+Expected: desktop shows horizontal nav; below 768px shows hamburger; clicking opens/closes menu; clicking a link closes menu.
+
+- [ ] **Step 6: Commit**
+
+```bash
+git add index.html
+git commit -m "feat: sticky header with hamburger menu"
+```
+
+---
+
+## Task 3: Seção Hero
+
+**Files:**
+- Modify: `index.html` — add `<section id="hero">` markup and CSS
+
+- [ ] **Step 1: Add hero markup** (after `</header>`, before `<!-- sections go here -->`)
+
+```html
+<section id="hero">
+  <div class="hero-content">
+    <p class="hero-location">Porto Alegre &middot; Centro Histórico</p>
+    <h1 class="hero-title">
+      Handrio e Tony<br>
+      <span class="hero-subtitle-name">Cabeleireiros</span>
+    </h1>
+    <p class="hero-tagline">Tradição e qualidade há décadas no coração de Porto Alegre</p>
+    <div class="hero-ctas">
+      <a href="https://wa.me/5551992124041" class="btn btn-whatsapp" target="_blank" rel="noopener">
+        📱 WhatsApp
+      </a>
+      <a href="tel:+555135171945" class="btn btn-phone">
+        ☎ Ligar
+      </a>
+    </div>
+    <div class="hero-rating">
+      <span class="stars">⭐⭐⭐⭐⭐</span>
+      <span><strong>5.014 avaliações</strong> no Google</span>
+    </div>
+  </div>
+</section>
+```
+
+- [ ] **Step 2: Add hero CSS**
+
+```css
+/* ── HERO ── */
+#hero {
+  background: linear-gradient(160deg, var(--bg-medium) 0%, var(--bg-caramel) 100%);
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 24px;
+}
+.hero-content { max-width: 600px; }
+.hero-location {
+  font-size: 0.75rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+.hero-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.2rem, 6vw, 3.6rem);
+  color: var(--bg-dark);
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+.hero-subtitle-name {
+  font-size: 0.45em;
+  letter-spacing: 6px;
+  font-weight: normal;
+  display: block;
+  text-transform: uppercase;
+  color: var(--bg-darker);
+}
+.hero-tagline {
+  font-size: 1rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin: 16px 0 28px;
+}
+.hero-ctas {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.btn {
+  display: inline-block;
+  padding: 12px 28px;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  transition: transform 0.15s, opacity 0.15s;
+}
+.btn:hover { transform: translateY(-2px); opacity: 0.92; }
+.btn-whatsapp { background: var(--whatsapp); color: white; }
+.btn-phone    { background: var(--bg-darker); color: var(--bg-light); }
+.hero-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.45);
+  border-radius: 30px;
+  padding: 8px 18px;
+  font-size: 0.85rem;
+  color: var(--bg-dark);
+}
+.hero-rating .stars { font-size: 0.9rem; }
+```
+
+- [ ] **Step 3: Open in browser, verify**
+
+Expected: full-viewport hero with gradient, large title, both CTA buttons, rating badge. Looks good on mobile and desktop.
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add index.html
+git commit -m "feat: hero section with CTA buttons and Google rating badge"
+```
+
+---
+
+## Task 4: Seção Serviços
+
+**Files:**
+- Modify: `index.html`
+
+- [ ] **Step 1: Add serviços markup** (after `</section>` of hero)
+
+```html
+<section id="servicos">
+  <div class="section-inner">
+    <h2 class="section-title">Nossos Serviços</h2>
+    <p class="section-subtitle">Atendemos com qualidade e cuidado há décadas</p>
+    <div class="services-grid">
+      <div class="service-card"><span>✂️</span> Corte Masculino</div>
+      <div class="service-card"><span>✂️</span> Corte Feminino</div>
+      <div class="service-card"><span>🎨</span> Coloração</div>
+      <div class="service-card"><span>💨</span> Escova</div>
+      <div class="service-card"><span>🧔</span> Barba</div>
+      <div class="service-card"><span>💧</span> Hidratação</div>
+      <div class="service-card"><span>🌿</span> Relaxamento</div>
+      <div class="service-card"><span>✨</span> Progressiva</div>
+    </div>
+  </div>
+</section>
+```
+
+- [ ] **Step 2: Add serviços CSS**
+
+```css
+/* ── SHARED SECTION STYLES ── */
+.section-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 72px 24px;
+}
+.section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  color: var(--bg-dark);
+  text-align: center;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.section-subtitle {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  font-style: italic;
+  margin-bottom: 40px;
+}
+
+/* ── SERVIÇOS ── */
+#servicos { background: var(--bg-light); }
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.service-card {
+  background: var(--bg-medium);
+  border-radius: 10px;
+  padding: 20px 16px;
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--bg-darker);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.service-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 14px rgba(61,43,31,0.15);
+}
+.service-card span { font-size: 1.6rem; }
+
+@media (max-width: 768px) {
+  .services-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .services-grid { grid-template-columns: 1fr; }
+  .section-inner { padding: 48px 16px; }
+}
+```
+
+- [ ] **Step 3: Open in browser, verify grid**
+
+Expected: 3 colunas no desktop, 2 no tablet, 1 no mobile. Cards com hover effect.
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add index.html
+git commit -m "feat: services section with responsive grid"
+```
+
+---
+
+## Task 5: Seção Galeria com Lightbox
+
+**Files:**
+- Modify: `index.html`
+
+- [ ] **Step 1: Add gallery markup** (after serviços `</section>`)
+
+```html
+<section id="galeria">
+  <div class="section-inner">
+    <h2 class="section-title" style="color: var(--bg-light);">Galeria</h2>
+    <p class="section-subtitle" style="color: var(--bg-caramel);">Nosso espaço e nosso trabalho</p>
+    <div class="gallery-grid" id="galleryGrid">
+      <div class="gallery-item" data-index="0">
+        <img src="images/salon-1.jpg" alt="Salão Handrio e Tony" loading="lazy">
+      </div>
+      <div class="gallery-item" data-index="1">
+        <img src="images/salon-2.jpg" alt="Salão Handrio e Tony" loading="lazy">
+      </div>
+      <div class="gallery-item" data-index="2">
+        <img src="images/salon-3.jpg" alt="Salão Handrio e Tony" loading="lazy">
+      </div>
+      <div class="gallery-item" data-index="3">
+        <img src="images/salon-4.jpg" alt="Salão Handrio e Tony" loading="lazy">
+      </div>
+      <div class="gallery-item" data-index="4">
+        <img src="images/salon-5.jpg" alt="Salão Handrio e Tony" loading="lazy">
+      </div>
+      <div class="gallery-item" data-index="5">
+        <img src="images/salon-6.jpg" alt="Salão Handrio e Tony" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div id="lightbox" aria-hidden="true">
+  <button id="lbClose" aria-label="Fechar">✕</button>
+  <button id="lbPrev" aria-label="Anterior">&#8592;</button>
+  <img id="lbImg" src="" alt="">
+  <button id="lbNext" aria-label="Próxima">&#8594;</button>
+</div>
+```
+
+- [ ] **Step 2: Add gallery & lightbox CSS**
+
+```css
+/* ── GALERIA ── */
+#galeria { background: var(--bg-dark); }
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.gallery-item {
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.gallery-item img {
+  transition: transform 0.3s;
+}
+.gallery-item:hover img { transform: scale(1.06); }
+
+/* ── LIGHTBOX ── */
+#lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0,0,0,0.92);
+  align-items: center;
+  justify-content: center;
+}
+#lightbox.active { display: flex; }
+#lbImg {
+  max-width: 90vw;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 4px;
+  width: auto;
+  height: auto;
+}
+#lbClose, #lbPrev, #lbNext {
+  position: absolute;
+  background: rgba(255,255,255,0.12);
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+#lbClose { top: 20px; right: 20px; border-radius: 50%; }
+#lbPrev  { left: 16px; }
+#lbNext  { right: 16px; }
+#lbClose:hover, #lbPrev:hover, #lbNext:hover { background: rgba(255,255,255,0.28); }
+
+@media (max-width: 768px) {
+  .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .gallery-grid { grid-template-columns: 1fr; }
+}
+```
+
+- [ ] **Step 3: Add lightbox JS** (inside `<script>`, after hamburger JS)
+
+```javascript
+// Lightbox
+const galleryItems = document.querySelectorAll('.gallery-item');
+const lightbox = document.getElementById('lightbox');
+const lbImg    = document.getElementById('lbImg');
+const lbClose  = document.getElementById('lbClose');
+const lbPrev   = document.getElementById('lbPrev');
+const lbNext   = document.getElementById('lbNext');
+
+let currentIndex = 0;
+const images = Array.from(galleryItems).map(el => el.querySelector('img'));
+
+function openLightbox(index) {
+  currentIndex = index;
+  lbImg.src = images[currentIndex].src;
+  lbImg.alt = images[currentIndex].alt;
+  lightbox.classList.add('active');
+  lightbox.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  lightbox.classList.remove('active');
+  lightbox.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+}
+
+function showPrev() {
+  currentIndex = (currentIndex - 1 + images.length) % images.length;
+  lbImg.src = images[currentIndex].src;
+}
+
+function showNext() {
+  currentIndex = (currentIndex + 1) % images.length;
+  lbImg.src = images[currentIndex].src;
+}
+
+galleryItems.forEach((item, i) => {
+  item.addEventListener('click', () => openLightbox(i));
+});
+lbClose.addEventListener('click', closeLightbox);
+lbPrev.addEventListener('click', showPrev);
+lbNext.addEventListener('click', showNext);
+lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+
+document.addEventListener('keydown', e => {
+  if (!lightbox.classList.contains('active')) return;
+  if (e.key === 'Escape')    closeLightbox();
+  if (e.key === 'ArrowLeft') showPrev();
+  if (e.key === 'ArrowRight') showNext();
+});
+```
+
+- [ ] **Step 4: Add placeholder images for testing**
+
+Add 6 colored `<div>` placeholders so the gallery renders even without real photos. Replace the `<img>` tags temporarily with colored divs:
+
+> **Note:** Only do this step if real photos aren't available yet. When photos are added to `images/`, revert to `<img>` tags. The simplest approach is to add CSS that shows a fallback background when images are missing:
+
+```css
+.gallery-item img {
+  background: var(--bg-darker);
+  min-height: 200px;
+}
+```
+
+This means broken images show a dark brown background instead of a broken image icon.
+
+- [ ] **Step 5: Open in browser, test lightbox**
+
+Expected: gallery grid renders; clicking a photo opens lightbox; arrows navigate; Esc and clicking outside closes it; scrolling is locked while lightbox is open.
+
+- [ ] **Step 6: Commit**
+
+```bash
+git add index.html
+git commit -m "feat: gallery section with lightbox, keyboard navigation"
+```
+
+---
+
+## Task 6: Seção Avaliações do Google
+
+**Files:**
+- Modify: `index.html`
+
+- [ ] **Step 1: Add avaliações markup** (after galeria `</section>`)
+
+```html
+<section id="avaliacoes">
+  <div class="section-inner">
+    <h2 class="section-title">O que dizem nossos clientes</h2>
+    <div class="rating-summary">
+      <span class="rating-stars">⭐⭐⭐⭐⭐</span>
+      <div>
+        <strong class="rating-number">5,0</strong>
+        <span class="rating-count">5.014 avaliações no Google</span>
+      </div>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Uma pena que o ponto não ajude, pois, o serviço é impecável"</p>
+        <span class="review-author">— Rodrigo Denicol Franzoni</span>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Joãozinho cabeleireiro top!!!"</p>
+        <span class="review-author">— Ilza Zacouteguy</span>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Atendimento de qualidade e profissionais experientes. Recomendo!"</p>
+        <span class="review-author">— Cliente Google</span>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top: 32px;">
+      <a href="https://www.google.com/maps/place/Handrio+e+Tony+Cabeleireiros/@-30.0333,-51.2296,17z" 
+         target="_blank" rel="noopener" class="btn-link">
+        Ver todas as avaliações no Google →
+      </a>
+    </div>
+  </div>
+</section>
+```
+
+- [ ] **Step 2: Add avaliações CSS**
+
+```css
+/* ── AVALIAÇÕES ── */
+#avaliacoes { background: var(--bg-light); }
+.rating-summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+.rating-stars { font-size: 1.4rem; }
+.rating-number {
+  display: block;
+  font-size: 2rem;
+  font-family: var(--font-serif);
+  color: var(--bg-dark);
+  line-height: 1;
+}
+.rating-count {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.review-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 10px rgba(61,43,31,0.08);
+}
+.review-stars { color: var(--accent); font-size: 1rem; margin-bottom: 12px; }
+.review-text {
+  font-size: 0.9rem;
+  color: var(--text-main);
+  font-style: italic;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+.review-author {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+.btn-link {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.9rem;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.2s;
+}
+.btn-link:hover { border-color: var(--accent); }
+
+@media (max-width: 768px) {
+  .reviews-grid { grid-template-columns: 1fr; }
+}
+```
+
+- [ ] **Step 3: Open in browser, verify**
+
+Expected: rating summary with stars and count, 3 review cards in a grid, "Ver todas" link visible.
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add index.html
+git commit -m "feat: Google reviews section"
+```
+
+---
+
+## Task 7: Seção Nossa Equipe
+
+**Files:**
+- Modify: `index.html`
+
+- [ ] **Step 1: Add equipe markup** (after avaliações `</section>`)
+
+```html
+<section id="equipe">
+  <div class="section-inner">
+    <h2 class="section-title">Nossa Equipe</h2>
+    <p class="section-subtitle">Profissionais dedicados ao seu bem-estar</p>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-photo">
+          <img src="images/team-handrio.jpg" alt="Handrio" onerror="this.style.display='none'">
+        </div>
+        <h3 class="team-name">Handrio</h3>
+        <p class="team-role">Sócio-Fundador</p>
+      </div>
+      <div class="team-card">
+        <div class="team-photo">
+          <img src="images/team-tony.jpg" alt="Tony" onerror="this.style.display='none'">
+        </div>
+        <h3 class="team-name">Tony</h3>
+        <p class="team-role">Sócio-Fundador</p>
+      </div>
+      <div class="team-card">
+        <div class="team-photo">
+          <img src="images/team-joaozinho.jpg" alt="Joãozinho" onerror="this.style.display='none'">
+        </div>
+        <h3 class="team-name">Joãozinho</h3>
+        <p class="team-role">Cabeleireiro</p>
+      </div>
+    </div>
+  </div>
+</section>
+```
+
+- [ ] **Step 2: Add equipe CSS**
+
+```css
+/* ── EQUIPE ── */
+#equipe { background: var(--bg-medium); }
+.team-grid {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.team-card { text-align: center; }
+.team-photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--bg-darker);
+  margin: 0 auto 16px;
+  border: 4px solid var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: var(--bg-caramel);
+}
+.team-photo img { width: 100%; height: 100%; object-fit: cover; }
+.team-name {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  color: var(--bg-dark);
+  margin-bottom: 4px;
+}
+.team-role {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+```
+
+- [ ] **Step 3: Open in browser, verify**
+
+Expected: 3 circular photo cards centrados. Quando `images/team-*.jpg` não existir, o círculo mostra fundo marrom escuro com borda laranja.
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add index.html
+git commit -m "feat: team section with circular photo cards"
+```
+
+---
+
+## Task 8: Seção Contato & Footer
+
+**Files:**
+- Modify: `index.html`
+
+- [ ] **Step 1: Add contato markup** (after equipe `</section>`)
+
+```html
+<section id="contato">
+  <div class="section-inner">
+    <h2 class="section-title" style="color: var(--bg-light);">Onde estamos</h2>
+    <div class="contact-layout">
+      <div class="contact-info">
+        <ul class="contact-list">
+          <li>
+            <span class="contact-icon">📍</span>
+            <div>
+              <strong>Endereço</strong><br>
+              R. Espírito Santo, 96 — Centro Histórico<br>
+              Porto Alegre - RS, 90010-370
+            </div>
+          </li>
+          <li>
+            <span class="contact-icon">📱</span>
+            <div>
+              <strong>WhatsApp</strong><br>
+              <a href="https://wa.me/5551992124041" target="_blank" rel="noopener">(51) 99212-4041</a>
+            </div>
+          </li>
+          <li>
+            <span class="contact-icon">☎</span>
+            <div>
+              <strong>Telefone</strong><br>
+              <a href="tel:+555135171945">(51) 3517-1945</a>
+            </div>
+          </li>
+          <li>
+            <span class="contact-icon">🕐</span>
+            <div>
+              <strong>Horário</strong><br>
+              Segunda a Sexta: a partir das 08h30<br>
+              Sábado: consulte pelo WhatsApp
+            </div>
+          </li>
+        </ul>
+        <div class="contact-ctas">
+          <a href="https://wa.me/5551992124041" class="btn btn-whatsapp" target="_blank" rel="noopener">
+            📱 WhatsApp
+          </a>
+          <a href="tel:+555135171945" class="btn btn-phone">☎ Ligar</a>
+        </div>
+      </div>
+      <div class="contact-map">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3453.8!2d-51.2296!3d-30.0333!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzDCsDAyJzAwLjAiUyA1McKwMTMnNDYuNiJX!5e0!3m2!1spt-BR!2sbr!4v1"
+          width="100%" height="320" style="border:0; border-radius:10px;" 
+          allowfullscreen="" loading="lazy" 
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Localização Handrio e Tony Cabeleireiros">
+        </iframe>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bar">
+    <p>© 2026 Handrio e Tony Cabeleireiros · Porto Alegre, RS</p>
+  </div>
+</section>
+```
+
+> **Note sobre o Maps embed:** O `src` do iframe acima é um placeholder. Para o embed real, busque "Handrio e Tony Cabeleireiros" no Google Maps → Compartilhar → Incorporar mapa → copie o `src` do iframe gerado e substitua acima.
+
+- [ ] **Step 2: Add contato CSS**
+
+```css
+/* ── CONTATO ── */
+#contato { background: var(--bg-dark); }
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+.contact-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+.contact-list li {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  color: var(--bg-caramel);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+.contact-list strong { color: var(--bg-light); display: block; margin-bottom: 2px; }
+.contact-list a { color: var(--accent); }
+.contact-list a:hover { color: var(--bg-light); }
+.contact-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
+.contact-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+.footer-bar {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding: 20px 24px;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+  .contact-layout { grid-template-columns: 1fr; gap: 32px; }
+}
+```
+
+- [ ] **Step 3: Get real Google Maps embed URL**
+
+1. Abra maps.google.com.br
+2. Busque: `Handrio e Tony Cabeleireiros Porto Alegre`
+3. Clique em Compartilhar → Incorporar mapa
+4. Copie o atributo `src` do `<iframe>` gerado
+5. Substitua o `src` do iframe no HTML pelo URL real
+
+- [ ] **Step 4: Open in browser, verify**
+
+Expected: dark section with contact list, map showing (or placeholder box), two CTA buttons, copyright bar.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add index.html
+git commit -m "feat: contact section with map, address, hours and CTA buttons"
+```
+
+---
+
+## Task 9: Botão WhatsApp Flutuante + Polimento Final
+
+**Files:**
+- Modify: `index.html`
+
+- [ ] **Step 1: Add floating WhatsApp button markup** (just before `</body>`)
+
+```html
+<a href="https://wa.me/5551992124041" 
+   class="whatsapp-float" 
+   target="_blank" 
+   rel="noopener"
+   aria-label="Fale conosco no WhatsApp">
+  <svg viewBox="0 0 24 24" fill="white" width="28" height="28">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</a>
+```
+
+- [ ] **Step 2: Add floating button CSS**
+
+```css
+/* ── WHATSAPP FLOAT ── */
+.whatsapp-float {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 150;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--whatsapp);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.whatsapp-float:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+}
+```
+
+- [ ] **Step 3: Final visual pass — open in browser at full desktop and mobile width**
+
+Check each section in order:
+- Header sticks and hamburger works on mobile
+- Hero fills viewport, CTAs are prominent
+- Serviços grid is clean
+- Galeria lightbox works with arrow keys
+- Avaliações cards look balanced
+- Equipe circles have accent border
+- Contato map loads, buttons visible
+- WhatsApp float appears bottom-right
+
+- [ ] **Step 4: Check all external links open correctly**
+
+- WhatsApp links → open `https://wa.me/5551992124041` in new tab
+- Phone link → triggers phone dial on mobile
+- "Ver todas no Google" → opens Google Maps profile
+- Nav links → scroll smoothly to each section
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add index.html
+git commit -m "feat: floating WhatsApp button, final polish"
+```
+
+---
+
+## Task 10: Deploy no GitHub Pages
+
+**Files:**
+- Create: `README.md`
+
+- [ ] **Step 1: Create README.md**
+
+```markdown
+# Handrio e Tony Cabeleireiros
+
+Site oficial do salão Handrio e Tony Cabeleireiros, Porto Alegre - RS.
+
+## Deploy
+
+Este site é hospedado via GitHub Pages.
+
+URL: https://[usuario].github.io/handrio-tony/
+
+## Fotos
+
+Adicione fotos em `images/`:
+- `salon-1.jpg` a `salon-6.jpg` — galeria do salão
+- `team-handrio.jpg`, `team-tony.jpg`, `team-joaozinho.jpg` — equipe
+
+## Atualização
+
+Para atualizar o site, edite `index.html` e faça push para a branch `main`.
+```
+
+- [ ] **Step 2: Create GitHub repository and push**
+
+```bash
+git remote add origin https://github.com/[usuario]/handrio-tony.git
+git branch -M main
+git push -u origin main
+```
+
+- [ ] **Step 3: Enable GitHub Pages**
+
+1. Acesse: `https://github.com/[usuario]/handrio-tony/settings/pages`
+2. Source: "Deploy from a branch"
+3. Branch: `main` / `/ (root)`
+4. Clique Save
+
+- [ ] **Step 4: Verify live site**
+
+Aguarde ~2 minutos e acesse: `https://[usuario].github.io/handrio-tony/`
+Expected: site completo e funcional no ar.
+
+- [ ] **Step 5: Final commit**
+
+```bash
+git add README.md
+git commit -m "docs: add README with deploy instructions"
+git push
+```
+
+---
+
+## Checklist de Cobertura da Spec
+
+| Requisito da Spec | Task |
+|-------------------|------|
+| Header fixo com hamburger mobile | Task 2 |
+| Hero com gradiente caramelo + CTAs | Task 3 |
+| Badge Google rating no hero | Task 3 |
+| Seção Serviços em grid 3 colunas | Task 4 |
+| Responsividade serviços (2 col tablet, 1 col mobile) | Task 4 |
+| Galeria fundo escuro + grid | Task 5 |
+| Lightbox com prev/next/Esc | Task 5 |
+| Avaliações com rating summary | Task 6 |
+| Link "Ver todas no Google" | Task 6 |
+| Equipe com fotos circulares | Task 7 |
+| Footer com mapa, endereço, horário | Task 8 |
+| Links WhatsApp `wa.me/5551992124041` | Tasks 3, 8, 9 |
+| Links telefone `tel:+555135171945` | Tasks 3, 8 |
+| Botão WhatsApp flutuante | Task 9 |
+| Smooth scroll | Task 1 (`scroll-behavior: smooth`) |
+| Deploy GitHub Pages | Task 10 |
