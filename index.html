@@ -213,11 +213,13 @@
       justify-content: space-between;
     }
     .hdr-logo {
-      font-family: var(--serif);
-      font-style: italic;
-      font-size: .95rem;
-      color: var(--gold);
-      letter-spacing: .5px;
+      display: flex;
+      align-items: center;
+    }
+    .hdr-logo img {
+      height: 38px;
+      width: auto;
+      display: block;
     }
     .hdr-nav {
       display: flex;
@@ -820,7 +822,9 @@
 <!-- ── HEADER ── -->
 <header id="hdr">
   <div class="hdr-inner">
-    <a href="#hero" class="hdr-logo">Handrio &amp; Tony</a>
+    <a href="#hero" class="hdr-logo">
+      <img src="logo_retangulo.png" alt="Handrio e Tony Cabeleireiros" height="38">
+    </a>
     <button class="hbg" id="hbg" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav">
       <span></span><span></span><span></span>
     </button>
