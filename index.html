@@ -289,18 +289,16 @@
       justify-content: center;
       text-align: center;
       padding: 100px 24px 80px;
-      background: radial-gradient(ellipse 110% 80% at 50% 30%, #1E1408 0%, var(--bg) 62%);
       position: relative;
       overflow: hidden;
+      background:
+        linear-gradient(to bottom,
+          rgba(0,0,0,.72) 0%,
+          rgba(10,6,2,.68) 60%,
+          rgba(0,0,0,.82) 100%),
+        url('fachada.png') center/cover no-repeat;
     }
-    .hero-deco {
-      position: absolute;
-      opacity: .04;
-      width: 380px;
-      pointer-events: none;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-    }
+    .hero-deco { display: none; }
     .hero-eyebrow {
       font-size: .6rem;
       letter-spacing: 6px;
