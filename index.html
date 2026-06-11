@@ -63,8 +63,14 @@
       {
         "@type": "OpeningHoursSpecification",
         "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
-        "opens": "08:30",
+        "opens": "09:00",
         "closes": "18:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Saturday"],
+        "opens": "09:00",
+        "closes": "12:30"
       }
     ],
     "aggregateRating": {
@@ -113,7 +119,7 @@
         "name": "Qual o horário de funcionamento?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Atendemos de segunda a sexta a partir das 08h30. Aos sábados, consulte pelo WhatsApp (51) 99212-4041."
+          "text": "Atendemos de segunda a sexta das 9h às 18h e aos sábados das 9h às 12h30."
         }
       },
       {
@@ -774,6 +780,45 @@
 
     @media (max-width: 480px) { .sec-inner, .sobre-inner { padding: 64px 16px; } }
 
+    /* ── PREÇOS ── */
+    #precos { background: var(--bg); }
+    .price-list {
+      list-style: none;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+    .price-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 16px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .price-list li:first-child { border-top: 1px solid var(--border); }
+    .price-list li span:first-child {
+      font-size: .7rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--text);
+      font-weight: 500;
+    }
+    .price-list li span:last-child {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      color: var(--gold);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .price-note {
+      text-align: center;
+      margin-top: 32px;
+      font-size: .72rem;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+    .price-note a { color: var(--gold); }
+
     /* ── CRO ADDITIONS ── */
     .hero-reply {
       font-size: .65rem;
@@ -837,6 +882,7 @@
     </button>
     <nav class="hdr-nav" id="nav" aria-label="Menu principal">
       <a href="#servicos">Serviços</a>
+      <a href="#precos">Preços</a>
       <a href="#galeria">Galeria</a>
       <a href="#faq">FAQ</a>
       <a href="#contato">Contato</a>
@@ -1007,6 +1053,27 @@
   </div>
 </section>
 
+<!-- ── PREÇOS ── -->
+<section id="precos" aria-label="Tabela de preços">
+  <div class="sec-inner">
+    <p class="eyebrow rv">Tabela</p>
+    <h2 class="sec-title rv d1">Preços</h2>
+    <div class="g-rule rv d1"></div>
+    <ul class="price-list">
+      <li class="rv"><span>Corte Masculino</span><span>R$ 45</span></li>
+      <li class="rv d1"><span>Corte Feminino</span><span>R$ 60</span></li>
+      <li class="rv d1"><span>Corte / Máquina</span><span>R$ 30</span></li>
+      <li class="rv d2"><span>Modelagem de Barba</span><span>R$ 30</span></li>
+      <li class="rv d2"><span>Coloração</span><span>a consultar</span></li>
+      <li class="rv d3"><span>Escova</span><span>a consultar</span></li>
+      <li class="rv d3"><span>Hidratação</span><span>a consultar</span></li>
+      <li class="rv"><span>Relaxamento</span><span>a consultar</span></li>
+      <li class="rv d1"><span>Progressiva</span><span>a consultar</span></li>
+    </ul>
+    <p class="price-note rv">Serviços a consultar: <a href="https://wa.me/5551992124041?text=Ol%C3%A1!%20Gostaria%20de%20saber%20os%20valores%20dos%20servi%C3%A7os." target="_blank" rel="noopener">WhatsApp (51) 99212-4041 →</a></p>
+  </div>
+</section>
+
 <!-- ── GALERIA ── -->
 <section id="galeria" aria-label="Galeria de trabalhos">
   <div class="sec-inner">
@@ -1105,7 +1172,7 @@
 
       <details class="faq-item rv d1">
         <summary class="faq-q">Qual o horário de funcionamento?</summary>
-        <p class="faq-a">Atendemos de <strong>segunda a sexta a partir das 08h30</strong>. Aos sábados, consulte disponibilidade pelo WhatsApp <a href="https://wa.me/5551992124041?text=Ol%C3%A1!%20Gostaria%20de%20saber%20sobre%20hor%C3%A1rio%20de%20s%C3%A1bado.">(51) 99212-4041</a>.</p>
+        <p class="faq-a">Atendemos de <strong>segunda a sexta das 9h às 18h</strong> e aos <strong>sábados das 9h às 12h30</strong>. Dúvidas: <a href="https://wa.me/5551992124041?text=Ol%C3%A1!%20Gostaria%20de%20saber%20sobre%20hor%C3%A1rio%20de%20s%C3%A1bado.">(51) 99212-4041</a>.</p>
       </details>
 
       <details class="faq-item rv d1">
@@ -1174,7 +1241,7 @@
               </div>
               <div>
                 <strong>Horário</strong>
-                Segunda a Sexta: a partir das 08h30<br>Sábado: consulte pelo WhatsApp
+                Seg a Sex: 9h às 18h<br>Sábado: 9h às 12h30
               </div>
             </li>
           </ul>
